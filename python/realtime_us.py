@@ -2,6 +2,7 @@
 
 from imutils.video import VideoStream
 from pyzbar.pyzbar import decode
+import RPi.GPIO as GPIO
 # from multiprocessing import Process
 # import threading
 import argparse
