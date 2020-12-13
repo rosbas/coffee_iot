@@ -5,6 +5,7 @@ from pyzbar.pyzbar import decode
 import RPi.GPIO as GPIO
 # from multiprocessing import Process
 # import threading
+from threading import Thread
 import argparse
 import datetime
 import imutils
@@ -57,37 +58,54 @@ def distance():
 
     return distance
 
+#cam thread loop
+def threadA():
+    while True:
+        frame = vs.read()
+        frame = imutils.resize(frame, width=400)
 
-while True:
-    frame = vs.read()
-    frame = imutils.resize(frame, width=400)
+        barcodes = decode(frame)
 
-    barcodes = decode(frame)
+        for barcode in barcodes:
+            (x,y,w,h) = barcode.rect
+            cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
 
-    for barcode in barcodes:
-        (x,y,w,h) = barcode.rect
-        cv2.rectangle(frame,(x,y),(x+w,y+h),(0,0,255),2)
+            barcodeData = barcode.data.decode("utf-8")
+            barcodeType = barcode.type
 
-        barcodeData = barcode.data.decode("utf-8")
-        barcodeType = barcode.type
+            text = "{} ({})".format(barcodeData,barcodeType)
+            cv2.putText(frame,text,(x,y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255),2)
 
-        text = "{} ({})".format(barcodeData,barcodeType)
-        cv2.putText(frame,text,(x,y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,255),2)
+            if barcodeData not in found:
+                csv.write("{},{}\n".format(datetime.datetime.now(), barcodeData))
+                csv.flush()
+                found.add(barcodeData)
+        cv2.imshow("Barcode Scanner", frame)
+        key = cv2.waitKey(1) & 0xFF
 
-        if barcodeData not in found:
-            csv.write("{},{}\n".format(datetime.datetime.now(), barcodeData))
-            csv.flush()
-            found.add(barcodeData)
-    cv2.imshow("Barcode Scanner", frame)
-    key = cv2.waitKey(1) & 0xFF
+        if key == ord("q"):
+            break
 
-    if key == ord("q"):
-        break
+# ultrasonic thread loop
+def threadB():
+    try:
+        while True:
+            dist = distance()
+            print("Measured Distance = %.1f cm" % dist)
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Measurement stopped by User")
+        GPIO.cleanup()
 
-    # ultrasonic loop, might need async options
-    dist = distance()
-    print("Measured Distance = %.1f cm" % dist)
-    time.sleep(1)
+if __name__ == "__main__":
+    t1=Thread(target = threadA)
+    t2=Thread(target = threadB)
+    t1.setDaemon(True)
+    t2.setDaemon(True)
+    t1.start()
+    t2.start()
+    while True():
+        pass
 
 print("[INFO] cleaning up...")
 csv.close()
