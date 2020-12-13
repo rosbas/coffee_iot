@@ -80,6 +80,8 @@ def threadA():
                 csv.write("{},{}\n".format(datetime.datetime.now(), barcodeData))
                 csv.flush()
                 found.add(barcodeData)
+                print("[Info] Barcode data {} is read\n".format(barcodeData))
+
         cv2.imshow("Barcode Scanner", frame)
         key = cv2.waitKey(1) & 0xFF
 
@@ -88,14 +90,18 @@ def threadA():
 
 # ultrasonic thread loop
 def threadB():
-    try:
-        while True:
-            dist = distance()
-            print("Measured Distance = %.1f cm" % dist)
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("Measurement stopped by User")
-        GPIO.cleanup()
+    while True:
+        dist = distance()
+        print("Measured Distance = %.1f cm" % dist)
+        time.sleep(1)
+    # try:
+    #     while True:
+    #         dist = distance()
+    #         print("Measured Distance = %.1f cm" % dist)
+    #         time.sleep(1)
+    # except KeyboardInterrupt:
+    #     print("Measurement stopped by User")
+    #     GPIO.cleanup()
 
 if __name__ == "__main__":
     t1=Thread(target = threadA)
