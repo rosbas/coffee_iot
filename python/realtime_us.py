@@ -104,7 +104,7 @@ if __name__ == "__main__":
     t2.setDaemon(True)
     t1.start()
     t2.start()
-    while True():
+    while True:
         pass
 
 print("[INFO] cleaning up...")
