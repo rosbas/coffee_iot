@@ -41,16 +41,16 @@ GPIO_ECHO = 24
 GPIO.setup(GPIO_TRIGGER, GPIO.OUT)
 GPIO.setup(GPIO_ECHO, GPIO.IN)
 
-# netpie section.
-port = 1883 # default port
-Server_ip = "broker.netpie.io" 
-Subscribe_Topic = "@msg/NodeRed"
-Publish_Topic = "@msg/NodeRed"
-Client_ID = "7ddaf291-1dce-4d8f-91d8-4f0a755d3338"
-Token = "vmcqnthj6CnEdqmxjBDMGpPQYhMXKJof"
-Secret = "OcoaJU9QeGFXK)CrU0de3u#S3iZ-XzAj"
+# # netpie section.
+# port = 1883 # default port
+# Server_ip = "broker.netpie.io" 
+# Subscribe_Topic = "@msg/NodeRed"
+# Publish_Topic = "@msg/NodeRed"
+# Client_ID = "7ddaf291-1dce-4d8f-91d8-4f0a755d3338"
+# Token = "vmcqnthj6CnEdqmxjBDMGpPQYhMXKJof"
+# Secret = "OcoaJU9QeGFXK)CrU0de3u#S3iZ-XzAj"
 
-MqttUser_Pass = {"username":Token,"password":Secret}
+# MqttUser_Pass = {"username":Token,"password":Secret}
 
 
 # The callback for when the client receives a CONNACK response from the server.
@@ -92,7 +92,7 @@ def distance():
 
     return distance
 
-client_initiate();
+# client_initiate();
 
 #cam thread loop
 def threadA():
@@ -155,13 +155,13 @@ def threadC():
 if __name__ == "__main__":
     t1=Thread(target = threadA)
     t2=Thread(target = threadB)
-    t3=Thread(target = threadC)
+    # t3=Thread(target = threadC)
     t1.setDaemon(True)
     t2.setDaemon(True)
-    t3.setDaemon(True)
+    # t3.setDaemon(True)
     t1.start()
     t2.start()
-    t3.start()
+    # t3.start()
     while True:
         pass
 
