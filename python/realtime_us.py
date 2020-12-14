@@ -51,7 +51,7 @@ Token = "vmcqnthj6CnEdqmxjBDMGpPQYhMXKJof"
 Secret = "OcoaJU9QeGFXK)CrU0de3u#S3iZ-XzAj"
 
 MqttUser_Pass = {"username":Token,"password":Secret}
-client_initiate();
+
 
 # The callback for when the client receives a CONNACK response from the server.
 def on_connect(client, userdata, flags, rc):
@@ -91,6 +91,8 @@ def distance():
     distance = (TimeElapsed * 34300)/2
 
     return distance
+
+client_initiate();
 
 #cam thread loop
 def threadA():
