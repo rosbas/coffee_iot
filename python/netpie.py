@@ -9,7 +9,7 @@ port = 1883 # default port
 Server_ip = "broker.netpie.io" 
 
 Subscribe_Topic = "@msg/NodeRed"
-Publish_Topic = "@msg/DHT11"
+Publish_Topic = "@msg/NodeRed"
 
 Client_ID = "7ddaf291-1dce-4d8f-91d8-4f0a755d3338"
 Token = "vmcqnthj6CnEdqmxjBDMGpPQYhMXKJof"
